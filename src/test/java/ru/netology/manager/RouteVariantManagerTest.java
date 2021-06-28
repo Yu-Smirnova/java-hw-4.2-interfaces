@@ -6,10 +6,10 @@ import org.junit.jupiter.api.Test;
 import ru.netology.domain.RouteVariant;
 import ru.netology.repository.RouteVariantsRepository;
 
-import static org.junit.jupiter.api.Assertions.*;
 
 class RouteVariantManagerTest {
     RouteVariantsRepository repo = new RouteVariantsRepository();
+    RouteVariantByTravelTimeAscComparator minTravelTime = new RouteVariantByTravelTimeAscComparator();
     RouteVariant var1 = new RouteVariant(1, 1000, "LED", "SVO", 90);
     RouteVariant var2 = new RouteVariant(2, 2000, "LED", "GOJ", 120);
     RouteVariant var3 = new RouteVariant(3, 5000, "LED", "OGZ", 210);
@@ -29,7 +29,7 @@ class RouteVariantManagerTest {
     void shouldFindAllByWhenOneIsEqual() {
         RouteVariantManager manager = new RouteVariantManager(repo);
 
-        RouteVariant[] result = manager.findAllBy("led", "Svo");
+        RouteVariant[] result = manager.findAllBy("led", "Svo", minTravelTime);
 
         RouteVariant[] expected = {var1};
         RouteVariant[] actual = result;
@@ -41,9 +41,9 @@ class RouteVariantManagerTest {
     void shouldFindAllByWhenMoreThenOneEqual(){
         RouteVariantManager manager = new RouteVariantManager(repo);
 
-        RouteVariant[] result = manager.findAllBy("LED", "ogz");
+        RouteVariant[] result = manager.findAllBy("LED", "ogz", minTravelTime);
 
-        RouteVariant[] expected = {var4, var5, var3};
+        RouteVariant[] expected = {var3, var5, var4};
         RouteVariant[] actual = result;
         Assertions.assertArrayEquals(expected, actual);
     }
@@ -52,7 +52,7 @@ class RouteVariantManagerTest {
     void shouldFindAllByWhenNoneEqual(){
         RouteVariantManager manager = new RouteVariantManager(repo);
 
-        RouteVariant[] result = manager.findAllBy("svo", "Dme");
+        RouteVariant[] result = manager.findAllBy("svo", "Dme", minTravelTime);
 
         RouteVariant[] expected = new RouteVariant[0];
         RouteVariant[] actual = result;
